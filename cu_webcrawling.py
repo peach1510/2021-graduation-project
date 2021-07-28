@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
+import json
+from collections import OrderedDict
 import time
 
 driver = webdriver.Chrome(
@@ -25,6 +27,9 @@ while True:
         break
 
 '''
+
+file_data = OrderedDict()
+datas = []
 
 i = 1
 childPoint = 17
@@ -62,12 +67,24 @@ while True:
             info = el_info.text
             tag = el_tag.text
 
-            print('='*50)
+            # print('='*50)
 
-            print('title: {}'.format(title))
-            print('price: {}'.format(price))
-            print('info: {}'.format(info))
-            print('tag: {}'.format(tag))
+        #    print('title: {}'.format(title))
+        #    print('price: {}'.format(price))
+        #    print('info: {}'.format(info))
+        #    print('tag: {}'.format(tag))
+        #file_data["title"] = title
+        #file_data["price"] = price
+        #file_data["info"] = info
+        #file_data["tag"] = tag
+
+        datas.append({"title": title, "price": price,
+                     "info": info, "tag": tag})
+
+        #print(json.dumps(file_data, ensure_ascii=False, indent="\t"))
+
+        with open('data_1.json', 'w', encoding='utf-8') as make_file:
+            json.dump(datas, make_file, ensure_ascii=False, indent='\t')
 
         i += 1
         driver.back()
