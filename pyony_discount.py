@@ -99,7 +99,7 @@ def crawler(brand_name, category, event):
                 Category = data.find(
                     'small', class_='float-right font-weight-bold').get_text()
                 total_price = data.get_text().split(
-                    '\n')[13][:-1].strip().replace(',', '')
+                    '\n')[14][:-1].strip()  # .replace(',', '')
 
                 if brand_name:
                     how_many = data.find(
