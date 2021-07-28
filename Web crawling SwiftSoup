@@ -1,0 +1,57 @@
+//
+//  ViewController.swift
+//  web_crawling
+//
+//  Created by Moon on 2021/07/19.
+//
+
+import UIKit
+import SwiftSoup
+
+class ViewController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+    }
+    
+    @IBAction func CrawlingButton(_ sender: Any) {
+        crawling()
+    }
+    
+    func crawling(){
+        
+        for i in 0..<3 {
+            let urlLink = "https://pyony.com/brands/cu/?event_type=&category=&item=100&sort=&q=&page=" + String(i)
+        
+            let url = URL(string: urlLink)
+            
+            guard let myURL = url else { return }
+            
+            do {
+                let html = try String(contentsOf: myURL, encoding: .utf8)
+                let doc: Document = try SwiftSoup.parse(html)
+                let headerTitle = try doc.title()
+                print(headerTitle)
+                
+                let ProductBlock: Elements = try doc.select("body > div > div > div.col-md-12.col-lg-8 > div.row > div")
+                let ProductType: String = "a > div > div.card-header.bg-cu.text-white.px-2.py-1"
+                let Products: String = "a > div > div.card-body.px-2.py-2 > div"
+                
+                for i in ProductBlock {
+                    if(ProductType.isEmpty) { continue }
+                    print("title: ", try i.select(ProductType).select("small.float-right.font-weight-bold").text())
+                    print("type? : " ,try i.select(ProductType).select("small.float-left.font-cu.font-weight-bold").text())
+                    print("product name : ", try i.select(Products).select("strong").text())
+                    print("product price : ", try i.select(Products).select("i").text())
+                    print("event type : ", try i.select(Products).select("span.badge.bg-cu.text-white").text())
+                }
+            } catch Exception.Error(let type, let message) {
+                print("Message : \(message)")
+            } catch {
+                print("error")
+            }
+        }
+    }
+}
+
